@@ -12,17 +12,17 @@ stages:
     params:
       params.yaml:
         prepare.seed: 20170428
-        prepare.split: 0.2
+        prepare.split: 0.25
     outs:
     - path: data/prepared
-      md5: 153aad06d376b6595932470e459ef42a.dir
+      md5: c08931d1c7459f43950b7aac03aa0ec5.dir
       size: 8437363
       nfiles: 2
   featurize:
     cmd: python3 src/featurization.py data/prepared data/features
     deps:
     - path: data/prepared
-      md5: 153aad06d376b6595932470e459ef42a.dir
+      md5: c08931d1c7459f43950b7aac03aa0ec5.dir
       size: 8437363
       nfiles: 2
     - path: src/featurization.py
@@ -30,64 +30,64 @@ stages:
       size: 2490
     params:
       params.yaml:
-        featurize.max_features: 200
-        featurize.ngrams: 2
+        featurize.max_features: 500
+        featurize.ngrams: 3
     outs:
     - path: data/features/test.pkl
-      md5: 314a75c3d11896c9a1872a15fb4cd8ba
-      size: 443762
+      md5: 480a3a41f731ec7d31bdbeb8bdf48b80
+      size: 803722
     - path: data/features/train.pkl
-      md5: 6ea11cbbd66ef6fb06a2850134902ac9
-      size: 1788826
+      md5: c72480f26465f79e94b2bef3df64bf66
+      size: 2400546
   train:
     cmd: python3 src/train.py data/features model.pkl
     deps:
     - path: data/features
-      md5: 3e79d1cdb273074cd6fb3803f4fea756.dir
-      size: 2232609
+      md5: 6b7c9da217154387bc2d38d79cac94c4.dir
+      size: 3204289
       nfiles: 3
     - path: src/train.py
       md5: c3961d777cfbd7727f9fde4851896006
       size: 967
     params:
       params.yaml:
-        train.min_split: 2
+        train.min_split: 3
         train.n_est: 50
         train.seed: 20170428
     outs:
     - path: model.pkl
-      md5: 948184a5fa0fcf5ca07beb3e6e548eea
-      size: 6578132
+      md5: d9423eac528c7cb7dc20479d210005a1
+      size: 5145721
   evaluate:
     cmd: python3 src/evaluate.py model.pkl data/features
     deps:
     - path: data/features
-      md5: 3e79d1cdb273074cd6fb3803f4fea756.dir
-      size: 2232609
+      md5: 6b7c9da217154387bc2d38d79cac94c4.dir
+      size: 3204289
       nfiles: 3
     - path: model.pkl
-      md5: 948184a5fa0fcf5ca07beb3e6e548eea
-      size: 6578132
+      md5: d9423eac528c7cb7dc20479d210005a1
+      size: 5145721
     - path: src/evaluate.py
       md5: 759095a28408e6a0dfe6019ba24eb6d5
       size: 2659
     outs:
     - path: evaluation/metrics.json
-      md5: b023eaa2fa15fb0a32faa2f46a57d8a3
+      md5: aac95aaf2e597284769a0a1f3120104f
       size: 73
     - path: evaluation/plots/importance.png
-      md5: 7413e4836bec3a367a1988bafda20040
-      size: 33062
+      md5: ae3130d67cac5cb1a46b468c4287eb36
+      size: 39869
     - path: evaluation/plots/metrics
-      md5: 06b2f6e27844c78361a50ea431c9910a.dir
+      md5: c7f7df6f209fd51a4dbb8632f90c98d2.dir
       size: 69
       nfiles: 2
     - path: evaluation/plots/prc.json
-      md5: f3a16520cc93c43950e20fa1b7b2502d
-      size: 20828
+      md5: a5dd7ad5196ca43e9f1f81e67aa955f4
+      size: 98837
     - path: evaluation/plots/sklearn/confusion_matrix.json
-      md5: 9acf0865955e9ffa94074a01e911fce7
-      size: 122246
+      md5: c58b0ecce3ca882be46c9c60baeb509a
+      size: 153234
     - path: evaluation/plots/sklearn/roc.json
-      md5: 27b11e9ac7e65b0f7aa4900df38661b9
-      size: 13056
+      md5: 78d01eb9c8af27d9c0066cb791a216dd
+      size: 70312
